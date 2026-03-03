@@ -1,0 +1,539 @@
+:root{
+  --lg-glass-bg: rgba(255, 255, 255, 0.08);
+  --lg-glass-border: rgba(255, 255, 255, 0.18);
+  --lg-glass-highlight: rgba(255, 255, 255, 0.28);
+  --lg-glass-shadow: 0 22px 65px rgba(0, 0, 0, 0.38);
+  --lg-blur: 18px;
+  --lg-radius: 22px;
+
+  --lg-text: rgba(255, 255, 255, 0.92);
+  --lg-muted: rgba(255, 255, 255, 0.72);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root{
+    --lg-glass-bg: rgba(255, 255, 255, 0.06);
+    --lg-glass-border: rgba(255, 255, 255, 0.14);
+    --lg-glass-highlight: rgba(255, 255, 255, 0.22);
+  }
+}
+
+html, body, [data-testid="stAppViewContainer"]{ height: 100%; }
+
+/* Multi-layer background + animated aurora + subtle noise. */
+[data-testid="stAppViewContainer"]{
+  background:
+    radial-gradient(1200px 700px at 12% 10%, rgba(122,162,255,0.26), transparent 55%),
+    radial-gradient(900px 520px at 92% 18%, rgba(255,122,200,0.22), transparent 62%),
+    radial-gradient(1100px 760px at 44% 92%, rgba(90,255,214,0.16), transparent 58%),
+    linear-gradient(180deg, rgba(10,12,20,1), rgba(7,10,18,1));
+  overflow-x: hidden;
+  position: relative;
+}
+
+[data-testid="stAppViewContainer"]::before{
+  content: "";
+  position: absolute;
+  inset: -45%;
+  background:
+    conic-gradient(
+      from 180deg,
+      rgba(122,162,255,0.16),
+      rgba(255,122,200,0.12),
+      rgba(90,255,214,0.12),
+      rgba(122,162,255,0.16)
+    );
+  filter: blur(44px);
+  animation: lg-aurora 14s ease-in-out infinite;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+[data-testid="stAppViewContainer"]::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.02),
+      rgba(255,255,255,0.02) 1px,
+      rgba(0,0,0,0.00) 1px,
+      rgba(0,0,0,0.00) 3px
+    );
+  mix-blend-mode: overlay;
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+@keyframes lg-aurora{
+  0%{ transform: translate3d(-3%, -2%, 0) rotate(0deg); }
+  50%{ transform: translate3d(3%, 2%, 0) rotate(140deg); }
+  100%{ transform: translate3d(-3%, -2%, 0) rotate(280deg); }
+}
+
+/* Liquid Glass surfaces */
+.lg-glass{
+  background: var(--lg-glass-bg);
+  border: 1px solid var(--lg-glass-border);
+  border-radius: var(--lg-radius);
+  box-shadow: var(--lg-glass-shadow);
+  backdrop-filter: blur(var(--lg-blur));
+  -webkit-backdrop-filter: blur(var(--lg-blur));
+  position: relative;
+  overflow: hidden;
+}
+
+.lg-glass::after{
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle at 30% 30%, var(--lg-glass-highlight), transparent 55%);
+  transform: rotate(10deg);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.lg-lift{
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+.lg-lift:hover{
+  transform: translate3d(0, -4px, 0);
+  box-shadow: 0 28px 85px rgba(0, 0, 0, 0.44);
+  border-color: rgba(255,255,255,0.26);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6, p, span, label { color: var(--lg-text); }
+[data-testid="stCaptionContainer"]{ color: var(--lg-muted) !important; }
+
+/* Sidebar: glass */
+section[data-testid="stSidebar"]{
+  background: rgba(255,255,255,0.05) !important;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+}
+
+/* Buttons */
+.stButton button, .stDownloadButton button{
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px);
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+.stButton button:hover, .stDownloadButton button:hover{
+  transform: translate3d(0,-2px,0);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.35);
+  background: rgba(255,255,255,0.10) !important;
+}
+
+/* KPI cards */
+div[data-testid="stMetric"]{
+  background: var(--lg-glass-bg);
+  border: 1px solid var(--lg-glass-border);
+  border-radius: 18px;
+  padding: 14px 14px 10px 14px;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.30);
+  backdrop-filter: blur(var(--lg-blur));
+}
+
+/* Dataframes */
+div[data-testid="stDataFrame"]{
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.03);
+}
+
+/* Chart containers */
+div[data-testid="stVegaLiteChart"]{
+  border-radius: 18px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.03);
+}
+
+/* Hero block */
+.lg-hero{
+  padding: 22px 22px 18px 22px;
+  margin: 6px 0 18px 0;
+}
+.lg-hero-title{
+  font-size: 28px;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.lg-hero-subtitle{
+  margin: 10px 0 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--lg-muted);
+}
+
+/* Subtle shimmer */
+.lg-shimmer::before{
+  content: "";
+  position: absolute;
+  inset: -40% 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.14) 50%, transparent 100%);
+  transform: translateX(-70%);
+  animation: lg-shimmer 4.8s ease-in-out infinite;
+  opacity: 0.5;
+  pointer-events: none;
+}
+@keyframes lg-shimmer{
+  0%{ transform: translateX(-70%); }
+  55%{ transform: translateX(70%); }
+  100%{ transform: translateX(70%); }
+}
+
+/* ------------------------------
+   Advanced motion (modern)
+   ------------------------------ */
+
+/* Reveal animation (JS toggles .lg-in) */
+.lg-reveal{
+  opacity: 0;
+  transform: translate3d(0, 12px, 0) scale(0.995);
+  filter: blur(1px);
+  transition: opacity 680ms cubic-bezier(.2,.8,.2,1), transform 680ms cubic-bezier(.2,.8,.2,1), filter 680ms cubic-bezier(.2,.8,.2,1);
+  will-change: opacity, transform, filter;
+}
+.lg-reveal.lg-in{
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0px);
+}
+
+/* Apply reveal targets */
+div[data-testid="stMetric"],
+div[data-testid="stVegaLiteChart"],
+div[data-testid="stPlotlyChart"],
+div[data-testid="stDataFrame"],
+div[data-testid="stMarkdownContainer"] > div.lg-glass{
+  /* JS will add .lg-reveal */
+}
+
+/* Chart titles look sharper */
+.vega-embed .mark-text,
+.vega-embed summary,
+.vega-embed .role-title{
+  letter-spacing: -0.01em;
+}
+
+/* Sidebar: fully themed controls */
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h3{
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+section[data-testid="stSidebar"] [data-testid="stRadio"] label,
+section[data-testid="stSidebar"] [data-testid="stSelectbox"] label,
+section[data-testid="stSidebar"] [data-testid="stMultiSelect"] label{
+  color: rgba(255,255,255,0.86) !important;
+}
+section[data-testid="stSidebar"] .stRadio [role="radiogroup"]{
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 10px 10px 4px 10px;
+}
+section[data-testid="stSidebar"] .stRadio [role="radio"]{
+  border-radius: 14px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+}
+section[data-testid="stSidebar"] .stRadio [role="radio"]:hover{
+  transform: translate3d(0,-1px,0);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.12);
+}
+
+/* Footer */
+.lg-footer-wrap{ margin-top: 20px; padding: 0 2px 10px 2px; }
+.lg-footer{ padding: 14px 16px; }
+.lg-footer-title{ font-weight: 780; letter-spacing: -0.02em; font-size: 13px; }
+.lg-footer-sub{ margin-top: 6px; font-size: 12px; color: var(--lg-muted); }
+
+/* Streamlit default footer / menu cleanup */
+#MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+header { visibility: hidden; }
+
+
+
+/* ============================================================
+   Ultra-graphic background: animated mesh + blobs + particles
+   ============================================================ */
+[data-testid="stAppViewContainer"]{
+  isolation: isolate;
+}
+
+.lg-bg-mesh{
+  position: fixed;
+  inset: -30%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(800px 520px at 18% 18%, rgba(110, 170, 255, 0.18), transparent 60%),
+    radial-gradient(780px 540px at 82% 22%, rgba(255, 115, 210, 0.16), transparent 62%),
+    radial-gradient(900px 640px at 50% 88%, rgba(90, 255, 214, 0.12), transparent 62%),
+    conic-gradient(from 220deg, rgba(110,170,255,0.10), rgba(255,115,210,0.08), rgba(90,255,214,0.08), rgba(110,170,255,0.10));
+  filter: blur(50px) saturate(120%);
+  animation: lg-mesh 18s ease-in-out infinite;
+  opacity: 1;
+}
+
+@keyframes lg-mesh{
+  0%{ transform: translate3d(-2%, -1%, 0) rotate(0deg) scale(1.05); }
+  50%{ transform: translate3d(2%, 1.5%, 0) rotate(120deg) scale(1.12); }
+  100%{ transform: translate3d(-2%, -1%, 0) rotate(240deg) scale(1.05); }
+}
+
+/* Add subtle floating blobs */
+.lg-bg-blobs{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(220px 180px at 12% 64%, rgba(110,170,255,0.12), transparent 70%),
+    radial-gradient(260px 220px at 88% 68%, rgba(255,115,210,0.10), transparent 72%),
+    radial-gradient(200px 170px at 52% 18%, rgba(90,255,214,0.08), transparent 72%);
+  animation: lg-blobs 12s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes lg-blobs{
+  0%{ transform: translate3d(0, 0, 0); opacity: .85; }
+  50%{ transform: translate3d(0, -10px, 0); opacity: .95; }
+  100%{ transform: translate3d(0, 0, 0); opacity: .85; }
+}
+
+/* Particle shimmer (CSS-only) */
+.lg-bg-particles{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.18), transparent 60%),
+    radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,0.16), transparent 60%),
+    radial-gradient(1px 1px at 55% 40%, rgba(255,255,255,0.12), transparent 60%),
+    radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,0.14), transparent 60%),
+    radial-gradient(1px 1px at 84% 56%, rgba(255,255,255,0.12), transparent 60%),
+    radial-gradient(1px 1px at 92% 24%, rgba(255,255,255,0.12), transparent 60%),
+    radial-gradient(1px 1px at 18% 86%, rgba(255,255,255,0.12), transparent 60%);
+  opacity: .35;
+  animation: lg-particles 10s linear infinite;
+}
+
+@keyframes lg-particles{
+  0%{ transform: translate3d(0,0,0); }
+  100%{ transform: translate3d(-1%, -2%, 0); }
+}
+
+/* Ensure all app content sits above background layers */
+[data-testid="stAppViewContainer"] > .main{
+  position: relative;
+  z-index: 2;
+}
+section[data-testid="stSidebar"]{
+  position: relative;
+  z-index: 3;
+}
+
+/* ============================================================
+   Chart containment + centering (Altair/Vega, Plotly)
+   ============================================================ */
+[data-testid="stAltairChart"], [data-testid="stVegaLiteChart"], .stPlotlyChart{
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  border-radius: var(--lg-radius);
+}
+
+/* Center the inner chart block */
+[data-testid="stAltairChart"] > div, [data-testid="stVegaLiteChart"] > div, .stPlotlyChart > div{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Prevent SVG/canvas overflow */
+[data-testid="stAltairChart"] svg, [data-testid="stVegaLiteChart"] svg, .stPlotlyChart svg,
+[data-testid="stAltairChart"] canvas, [data-testid="stVegaLiteChart"] canvas, .stPlotlyChart canvas{
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Vega embed container */
+.vega-embed, .vega-embed > div{
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+/* ============================================================
+   Modern entrance animations (respect reduced motion)
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference){
+  .lg-reveal{
+    animation: lg-reveal-in 600ms cubic-bezier(.2,.9,.2,1) both;
+  }
+  @keyframes lg-reveal-in{
+    from{ opacity: 0; transform: translate3d(0, 10px, 0) scale(.985); filter: blur(6px); }
+    to{ opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0); }
+  }
+}
+
+
+/* =========================
+   Ultra Background: Image + Neon Glow + Waves + Parallax
+   ========================= */
+:root{
+  --lg-parallax-y: 0px;
+  --lg-neon-cyan: rgba(70, 214, 255, 0.28);
+  --lg-neon-magenta: rgba(255, 82, 196, 0.22);
+  --lg-neon-purple: rgba(170, 120, 255, 0.18);
+  --lg-card-glow: 0 0 0 1px rgba(255,255,255,0.10),
+                  0 18px 55px rgba(0,0,0,0.38),
+                  0 0 55px var(--lg-neon-cyan),
+                  0 0 70px var(--lg-neon-magenta);
+}
+
+.lg-bg-image{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--lg-bg-img);
+  background-size: cover;
+  background-position: center;
+  transform: translate3d(0, var(--lg-parallax-y), 0) scale(1.06);
+  will-change: transform;
+  filter: saturate(115%) contrast(108%);
+  opacity: 0.92;
+}
+
+.lg-bg-glow{
+  position: fixed;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 620px at 18% 22%, rgba(70, 214, 255, 0.22), transparent 60%),
+    radial-gradient(820px 560px at 82% 26%, rgba(255, 82, 196, 0.18), transparent 62%),
+    radial-gradient(980px 720px at 58% 88%, rgba(170, 120, 255, 0.14), transparent 64%);
+  filter: blur(44px) saturate(125%);
+  animation: lg-glow-drift 16s ease-in-out infinite;
+  opacity: 1;
+}
+
+@keyframes lg-glow-drift{
+  0%{ transform: translate3d(-2%, -1%, 0) rotate(0deg) scale(1.02); }
+  50%{ transform: translate3d(2%, 1%, 0) rotate(8deg) scale(1.06); }
+  100%{ transform: translate3d(-2%, -1%, 0) rotate(0deg) scale(1.02); }
+}
+
+.lg-bg-waves{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  filter: blur(0.6px) saturate(120%);
+  background:
+    radial-gradient(1200px 420px at 20% 15%, rgba(70,214,255,0.10), transparent 70%),
+    radial-gradient(1200px 420px at 80% 90%, rgba(255,82,196,0.10), transparent 70%),
+    repeating-linear-gradient(
+      110deg,
+      rgba(70,214,255,0.00) 0px,
+      rgba(70,214,255,0.00) 22px,
+      rgba(70,214,255,0.08) 28px,
+      rgba(70,214,255,0.00) 34px
+    );
+  background-size: 100% 100%, 100% 100%, 420px 420px;
+  animation: lg-wave-move 12s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes lg-wave-move{
+  0%{ background-position: 0% 0%, 0% 0%, 0px 0px; }
+  100%{ background-position: 0% 0%, 0% 0%, 420px 420px; }
+}
+
+/* Dark readability veil (very light, keeps the image visible) */
+.lg-bg-veil{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0.60), rgba(0,0,0,0.48) 40%, rgba(0,0,0,0.58));
+}
+
+/* Ensure app surfaces are above background */
+[data-testid="stAppViewContainer"]{
+  background: transparent !important;
+}
+main .block-container{
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================
+   Hover glow on glass surfaces
+   ========================= */
+div[data-testid="stMetric"],
+div[data-testid="stDataFrame"],
+div[data-testid="stVerticalBlockBorderWrapper"],
+div[data-testid="stExpander"],
+section[data-testid="stSidebar"] > div{
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease, border-color 220ms ease;
+}
+
+div[data-testid="stMetric"]:hover,
+div[data-testid="stDataFrame"]:hover,
+div[data-testid="stVerticalBlockBorderWrapper"]:hover,
+div[data-testid="stExpander"]:hover{
+  transform: translate3d(0,-2px,0);
+  box-shadow: var(--lg-card-glow) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+/* =========================
+   Charts: hard containment + centering
+   ========================= */
+div[data-testid="stVegaLiteChart"], div[data-testid="stAltairChart"], .stPlotlyChart, div[data-testid="stGraphVizChart"]{
+  width: 100% !important;
+  overflow: hidden !important;
+}
+div[data-testid="stVegaLiteChart"] > div, 
+div[data-testid="stAltairChart"] > div, 
+.stPlotlyChart > div{
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 100% !important;
+}
+div[data-testid="stVegaLiteChart"] svg, 
+div[data-testid="stAltairChart"] svg,
+.stPlotlyChart svg, 
+.stPlotlyChart canvas{
+  max-width: 100% !important;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce){
+  .lg-bg-glow, .lg-bg-waves, .lg-bg-mesh, .lg-bg-blobs, .lg-bg-particles{
+    animation: none !important;
+  }
+  div[data-testid="stMetric"]:hover,
+  div[data-testid="stDataFrame"]:hover,
+  div[data-testid="stVerticalBlockBorderWrapper"]:hover,
+  div[data-testid="stExpander"]:hover{
+    transform: none !important;
+  }
+}

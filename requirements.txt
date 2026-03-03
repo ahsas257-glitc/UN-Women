@@ -1,0 +1,8 @@
+streamlit
+pandas
+altair
+gspread
+google-auth
+openpyxl
+python-docx
+pyarrow
